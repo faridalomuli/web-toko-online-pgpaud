@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <title>Login Admin</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to right, #74ebd5, #acb6e5);
+      margin: 0;
+      padding: 0;
+      display: flex;
+      height: 100vh;
+      align-items: center;
+      justify-content: center;
+    }
+
+    form {
+      background: #fff;
+      padding: 30px 25px;
+      border-radius: 10px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 350px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #333;
+      margin-bottom: 25px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+      color: #555;
+      font-weight: 500;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      box-sizing: border-box;
+      transition: 0.3s;
+      font-size: 15px;
+    }
+
+    input:focus {
+      border-color: #007BFF;
+      outline: none;
+      box-shadow: 0 0 4px rgba(0, 123, 255, 0.3);
+    }
+
+    button {
+      background-color: #007BFF;
+      color: white;
+      border: none;
+      padding: 12px;
+      width: 100%;
+      font-size: 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    .error {
+      color: red;
+      text-align: center;
+      font-size: 14px;
+      margin-top: 10px;
+    }
+
+    .success {
+      color: green;
+      text-align: center;
+      font-size: 14px;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <form id="loginForm" onsubmit="return login(event)">
+    <h1>Login Admin</h1>
+
+    <label for="username">Username:</label>
+    <input type="text" id="username" required />
+
+    <label for="password">Password:</label>
+    <input type="password" id="password" required />
+
+    <button type="submit">Login</button>
+
+    <div id="errorMsg" class="error"></div>
+  </form>
+
+  <script>
+    function login(event) {
+      event.preventDefault(); // mencegah reload
+
+      const username = document.getElementById("username").value.trim();
+      const password = document.getElementById("password").value;
+      const errorMsg = document.getElementById("errorMsg");
+
+      // Admin login sederhana
+      const adminUser = "admin";
+      const adminPass = "12345";
+
+      if (username === adminUser && password === adminPass) {
+        // Simpan ke session/local storage jika perlu
+        localStorage.setItem("isAdminLoggedIn", "true");
+window.location.href = "admin.html";
+ // arahkan ke halaman admin
+      } else {
+        errorMsg.textContent = "Username atau Password salah.";
+      }
+
+      return false;
+    }
+  </script>
+
+</body>
+</html>

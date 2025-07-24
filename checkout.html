@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Struk Pembelian</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f5f5f5;
+      padding: 30px;
+      max-width: 700px;
+      margin: auto;
+      color: #333;
+    }
+
+    h1 {
+      color: #27ae60;
+      text-align: center;
+      border-bottom: 2px dashed #ccc;
+      padding-bottom: 10px;
+    }
+
+    .info {
+      margin: 20px 0;
+      font-size: 16px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background-color: white;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    }
+
+    th {
+      background-color: #27ae60;
+      color: white;
+      padding: 10px;
+    }
+
+    td {
+      padding: 10px;
+      border-bottom: 1px solid #eee;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    .summary {
+      margin-top: 25px;
+      font-size: 18px;
+      padding: 15px;
+      background-color: #fff;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+      border-left: 5px solid #27ae60;
+    }
+
+    .summary span {
+      float: right;
+      font-weight: bold;
+    }
+
+    .btn-cetak {
+      margin-top: 30px;
+      display: block;
+      background-color: #e67e22;
+      color: white;
+      padding: 12px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      text-align: center;
+      width: 100%;
+    }
+
+    .btn-cetak:hover {
+      background-color: #d35400;
+    }
+
+    @media print {
+      .btn-cetak {
+        display: none;
+      }
+
+      body {
+        background-color: white;
+        box-shadow: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>Struk Pembelian</h1>
+
+  <div class="info"><strong>Tanggal:</strong> <span id="tanggal"></span></div>
+
+  <table id="tabel-produk">
+    <thead>
+      <tr>
+        <th>Nama Produk</th>
+        <th>Harga</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <div class="summary">
+    Total: <span id="totalHarga"></span><br>
+    Metode Pembayaran: <span id="metode"></span>
+  </div>
+
+  <button class="btn-cetak" onclick="window.print()">🖨️ Cetak Struk</button>
+
+  <script>
+    const produk = JSON.parse(localStorage.getItem("keranjang")) || [];
+    const total = localStorage.getItem("totalHarga") || 0;
+    const metode = localStorage.getItem("metodePembayaran") || "-";
+
+    const tbody = document.querySelector("#tabel-produk tbody");
+    const totalSpan = document.getElementById("totalHarga");
+    const metodeSpan = document.getElementById("metode");
+    const tanggalSpan = document.getElementById("tanggal");
+
+    // Tampilkan tanggal dan waktu
+    const tanggal = new Date();
+    tanggalSpan.textContent = tanggal.toLocaleString("id-ID", {
+      day: 'numeric', month: 'long', year: 'numeric',
+      hour: '2-digit', minute: '2-digit'
+    });
+
+    // Tampilkan produk di tabel
+    if (produk.length > 0) {
+      produk.forEach(item => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td>${item.nama}</td>
+          <td>Rp ${item.harga.toLocaleString("id-ID")}</td>
+        `;
+        tbody.appendChild(row);
+      });
+    } else {
+      const row = document.createElement("tr");
+      row.innerHTML = `<td colspan="2" style="text-align:center;">Tidak ada produk.</td>`;
+      tbody.appendChild(row);
+    }
+
+    // Tampilkan total dan metode
+    totalSpan.textContent = `Rp ${Number(total).toLocaleString("id-ID")}`;
+    metodeSpan.textContent = metode;
+
+    // Hapus data checkout dari localStorage (opsional)
+    localStorage.removeItem("keranjang");
+    localStorage.removeItem("totalHarga");
+    localStorage.removeItem("metodePembayaran");
+  </script>
+</body>
+</html>

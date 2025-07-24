@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <title>Halaman Admin</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #e4e9f0;
+      margin: 0;
+      padding: 30px 15px;
+      display: flex;
+      justify-content: center;
+      min-height: 100vh;
+    }
+    .container {
+      background: white;
+      width: 100%;
+      max-width: 480px;
+      padding: 25px 30px 40px;
+      border-radius: 10px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+      position: relative;
+    }
+    h1 {
+      color: #2c3e50;
+      margin-bottom: 25px;
+      text-align: center;
+      font-weight: 700;
+      letter-spacing: 1.2px;
+    }
+    h3 {
+      color: #34495e;
+      margin-top: 25px;
+      margin-bottom: 15px;
+      font-weight: 600;
+      border-bottom: 2px solid #3498db;
+      padding-bottom: 6px;
+    }
+    form label {
+      font-weight: 600;
+      color: #34495e;
+      margin-bottom: 6px;
+      display: block;
+    }
+    input[type="text"],
+    input[type="number"] {
+      width: 100%;
+      padding: 10px 12px;
+      font-size: 15px;
+      border: 1.8px solid #bdc3c7;
+      border-radius: 6px;
+      transition: border-color 0.3s ease;
+      outline: none;
+    }
+    input[type="text"]:focus,
+    input[type="number"]:focus {
+      border-color: #3498db;
+      box-shadow: 0 0 6px rgba(52,152,219,0.5);
+    }
+    button {
+      margin-top: 15px;
+      width: 100%;
+      padding: 12px;
+      font-size: 16px;
+      font-weight: 700;
+      color: white;
+      background-color: #27ae60;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    button:hover {
+      background-color: #219150;
+    }
+    #produkList {
+      margin-top: 20px;
+    }
+    .produk-item {
+      background-color: #f9fafc;
+      padding: 15px 20px;
+      margin: 10px 0;
+      border: 1.5px solid #dfe6e9;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 16px;
+      color: #2d3436;
+    }
+    .produk-item strong {
+      font-weight: 700;
+      color: #2c3e50;
+    }
+    .produk-item button {
+      background-color: #e74c3c;
+      padding: 7px 14px;
+      font-size: 14px;
+      border-radius: 6px;
+      transition: background-color 0.3s ease;
+    }
+    .produk-item button:hover {
+      background-color: #c0392b;
+    }
+    #totalHarga {
+      font-weight: 700;
+      font-size: 18px;
+      color: #2c3e50;
+      margin-top: 10px;
+      text-align: right;
+      border-top: 2px solid #3498db;
+      padding-top: 12px;
+    }
+    .logout {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background-color: #e74c3c;
+      border-radius: 6px;
+      padding: 8px 14px;
+      font-weight: 600;
+      font-size: 14px;
+      border: none;
+      cursor: pointer;
+      color: white;
+      transition: background-color 0.3s ease;
+    }
+    .logout:hover {
+      background-color: #c0392b;
+    }
+    @media (max-width: 520px) {
+      body {
+        padding: 20px 10px;
+      }
+      .container {
+        padding: 20px 20px 30px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <button class="logout" onclick="logout()">Logout</button>
+    <h1>Panel Admin</h1>
+
+    <h3>Tambah Produk (Dummy)</h3>
+    <form id="formTambah" onsubmit="return tambahProduk()">
+      <label for="namaProduk">Nama Produk:</label>
+      <input type="text" id="namaProduk" required />
+      <label for="hargaProduk">Harga Produk (Rp):</label>
+      <input type="number" id="hargaProduk" required min="1" />
+      <button type="submit">Tambah</button>
+    </form>
+
+    <div id="produkList">
+      <h3>Daftar Produk:</h3>
+      <div id="listContainer"></div>
+      <h3>Total Harga Produk: Rp <span id="totalHarga">0</span></h3>
+    </div>
+  </div>
+
+  <script>
+    if (localStorage.getItem("isAdminLoggedIn") !== "true") {
+      alert("Anda belum login sebagai admin.");
+      window.location.href = "login.html";
+    }
+
+    let produkAdmin = JSON.parse(localStorage.getItem("produkAdmin")) || [];
+
+    function hitungTotalHarga() {
+      const total = produkAdmin.reduce((sum, item) => sum + item.harga, 0);
+      document.getElementById("totalHarga").textContent = total.toLocaleString("id-ID");
+    }
+
+    function tampilkanProduk() {
+      const list = document.getElementById("listContainer");
+      list.innerHTML = "";
+
+      if (produkAdmin.length === 0) {
+        list.innerHTML = "<p>Belum ada produk.</p>";
+        document.getElementById("totalHarga").textContent = "0";
+        return;
+      }
+
+      produkAdmin.forEach((item, i) => {
+        const div = document.createElement("div");
+        div.className = "produk-item";
+        div.innerHTML = `
+          <div>
+            <strong>${item.nama}</strong><br>
+            Harga: Rp ${item.harga.toLocaleString("id-ID")}
+          </div>
+          <button onclick="hapusProduk(${i})">Hapus</button>
+        `;
+        list.appendChild(div);
+      });
+
+      hitungTotalHarga();
+    }
+
+    function tambahProduk() {
+      const nama = document.getElementById("namaProduk").value.trim();
+      const harga = parseInt(document.getElementById("hargaProduk").value);
+
+      if (harga <= 0 || isNaN(harga)) {
+        alert("Harga produk harus lebih dari 0 dan valid.");
+        return false;
+      }
+
+      produkAdmin.push({ nama, harga });
+      localStorage.setItem("produkAdmin", JSON.stringify(produkAdmin));
+
+      tampilkanProduk();
+      document.getElementById("formTambah").reset();
+      return false;
+    }
+
+    function hapusProduk(index) {
+      if (confirm("Yakin ingin menghapus produk ini?")) {
+        produkAdmin.splice(index, 1);
+        localStorage.setItem("produkAdmin", JSON.stringify(produkAdmin));
+        tampilkanProduk();
+      }
+    }
+
+    function logout() {
+      localStorage.removeItem("isAdminLoggedIn");
+      alert("Anda telah logout.");
+      window.location.href = "login.html";
+    }
+
+    tampilkanProduk();
+  </script>
+</body>
+</html>

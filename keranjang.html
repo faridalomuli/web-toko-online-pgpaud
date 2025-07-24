@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Keranjang</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f9f9f9;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      background-color: #2c3e50;
+      padding: 20px;
+      color: white;
+      text-align: center;
+    }
+
+    nav {
+      background-color: #34495e;
+      padding: 10px;
+      text-align: center;
+    }
+
+    nav a {
+      color: white;
+      margin: 0 10px;
+      text-decoration: none;
+      padding: 8px 15px;
+      background-color: #2980b9;
+      border-radius: 5px;
+    }
+
+    nav a:hover {
+      background-color: #1abc9c;
+    }
+
+    #keranjang {
+      padding: 20px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+    }
+
+    .produk-card {
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+      padding: 15px;
+      width: 220px;
+      text-align: center;
+    }
+
+    .produk-card img {
+      width: 100%;
+      height: auto;
+      border-radius: 5px;
+    }
+
+    .produk-card h3 {
+      font-size: 16px;
+      margin: 10px 0 5px;
+    }
+
+    .produk-card p {
+      margin: 5px 0;
+      color: #e67e22;
+      font-weight: bold;
+    }
+
+    .hapus-btn {
+      background-color: #e74c3c;
+      color: white;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .hapus-btn:hover {
+      background-color: #c0392b;
+    }
+
+    #total {
+      text-align: center;
+      font-size: 20px;
+      margin: 20px;
+      color: #333;
+    }
+
+    .checkout-section {
+      text-align: center;
+      padding: 20px;
+      background-color: #fff;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+      margin: 0 auto 40px;
+      width: fit-content;
+      border-radius: 8px;
+    }
+
+    select {
+      padding: 8px;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+      margin-bottom: 15px;
+    }
+
+    .checkout-btn,
+    .beli-btn {
+      background-color: #27ae60;
+      color: white;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 5px;
+      text-decoration: none;
+      margin: 5px;
+      display: inline-block;
+      font-weight: bold;
+    }
+
+    .checkout-btn:hover,
+    .beli-btn:hover {
+      background-color: #1e8449;
+    }
+
+    .disabled {
+      background-color: gray !important;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Keranjang Belanja</h1>
+  </header>
+
+  <nav>
+    <a href="index.html">Beranda</a>
+    <a href="produk.html">Kembali ke Produk</a>
+  </nav>
+
+  <div id="keranjang"></div>
+  <h3 id="total">Total: Rp 0</h3>
+
+  <div class="checkout-section">
+    <label for="metodeBayar"><strong>Pilih Metode Pembayaran:</strong></label><br>
+    <select id="metodeBayar">
+      <option value="BCA">Bank BCA</option>
+      <option value="BRI">Bank BRI</option>
+      <option value="Mandiri">Bank Mandiri</option>
+      <option value="BNI">Bank BNI</option>
+    </select><br>
+
+    <a href="checkout.html" id="checkoutBtn" class="checkout-btn">Lanjut ke Checkout</a>
+    <button id="beliBtn" class="beli-btn">Beli Sekarang</button>
+  </div>
+
+  <script>
+    let keranjang = JSON.parse(localStorage.getItem("keranjang")) || [];
+
+    function tampilkanKeranjang() {
+      const keranjangDiv = document.getElementById("keranjang");
+      const totalDiv = document.getElementById("total");
+      const checkoutBtn = document.getElementById("checkoutBtn");
+      const beliBtn = document.getElementById("beliBtn");
+      keranjangDiv.innerHTML = "";
+
+      if (keranjang.length === 0) {
+        keranjangDiv.innerHTML = "<p style='text-align:center;'>Keranjang kosong.</p>";
+        totalDiv.textContent = "Total: Rp 0";
+        checkoutBtn.classList.add("disabled");
+        beliBtn.classList.add("disabled");
+        return;
+      }
+
+      let totalHarga = 0;
+
+      keranjang.forEach((item, index) => {
+        const div = document.createElement("div");
+        div.className = "produk-card";
+        div.innerHTML = `
+          <img src="img/kaos${item.id}.jpg" alt="${item.nama}">
+          <h3>${item.nama}</h3>
+          <p>Harga: Rp ${item.harga.toLocaleString("id-ID")}</p>
+          <button class="hapus-btn" onclick="hapusItem(${index})">Hapus</button>
+        `;
+        keranjangDiv.appendChild(div);
+        totalHarga += item.harga;
+      });
+
+      totalDiv.textContent = `Total: Rp ${totalHarga.toLocaleString("id-ID")}`;
+      checkoutBtn.classList.remove("disabled");
+      beliBtn.classList.remove("disabled");
+
+      localStorage.setItem("totalHarga", totalHarga);
+    }
+
+    function hapusItem(index) {
+      keranjang.splice(index, 1);
+      localStorage.setItem("keranjang", JSON.stringify(keranjang));
+      tampilkanKeranjang();
+    }
+
+    document.getElementById("beliBtn").addEventListener("click", () => {
+      const metode = document.getElementById("metodeBayar").value;
+      localStorage.setItem("metodePembayaran", metode);
+      alert(`Pesanan Anda diproses dengan metode pembayaran: ${metode}`);
+      localStorage.removeItem("keranjang");
+      window.location.href = "checkout.html";
+    });
+
+    tampilkanKeranjang();
+  </script>
+</body>
+</html>

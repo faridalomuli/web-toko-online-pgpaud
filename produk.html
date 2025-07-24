@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <title>Produk </title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      background-color: #f4f4f4;
+    }
+    h1 {
+      text-align: center;
+      background-color: #2c3e50;
+      color: white;
+      padding: 20px;
+      margin: 0;
+    }
+    nav {
+      background-color: #34495e;
+      text-align: center;
+      padding: 10px 0;
+    }
+    nav a {
+      color: white;
+      text-decoration: none;
+      margin: 0 10px;
+      padding: 8px 12px;
+      background-color: #2980b9;
+      border-radius: 4px;
+      transition: background-color 0.3s ease;
+    }
+    nav a:hover {
+      background-color: #1abc9c;
+    }
+    #produk-list {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      padding: 20px;
+    }
+    .produk-card {
+      background-color: white;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px;
+      width: 230px;
+      text-align: center;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      transition: transform 0.2s ease;
+    }
+    .produk-card:hover {
+      transform: scale(1.03);
+    }
+    .produk-card img {
+      width: 100%;
+      height: auto;
+      border-radius: 4px;
+      object-fit: cover;
+    }
+    .produk-card button {
+      margin-top: 10px;
+      padding: 8px 12px;
+      background-color: orange;
+      border: none;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+    .produk-card button:hover {
+      background-color: #e67e22;
+    }
+    .btn-detail {
+      background-color: #2980b9;
+      margin-top: 8px;
+    }
+    .btn-detail:hover {
+      background-color: #1abc9c;
+    }
+    .detail-produk {
+      display: none;
+      text-align: left;
+      margin-top: 10px;
+      border-top: 1px solid #ccc;
+      padding-top: 10px;
+      font-size: 14px;
+    }
+    .ulasan {
+      margin-top: 10px;
+      border-top: 1px solid #eee;
+      padding-top: 6px;
+    }
+    .bintang {
+      color: #f1c40f;
+      font-size: 14px;
+    }
+    .ulasan p {
+      margin: 4px 0;
+      font-style: italic;
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+  <h1>Daftar Produk </h1>
+  <nav>
+    <a href="index.html">Beranda</a>
+    <a href="keranjang.html">Keranjang</a>
+    <a href="checkout.html">Checkout</a>
+    <a href="login.html">Login</a>
+  </nav>
+
+  <div id="produk-list"></div>
+
+  <script>
+    const produkData = [
+      {
+        id: 1,
+        nama: "Kaos Hitam Polos",
+        harga: 50000,
+        img: "img/kaos1.jpg",
+        deskripsi: "Kaos hitam polos dengan bahan katun berkualitas, nyaman dipakai sehari-hari.",
+        ulasan: [
+          { rating: 5, komentar: "Sangat nyaman dan awet!" },
+          { rating: 4, komentar: "Warna hitamnya pekat dan tidak mudah luntur." }
+        ]
+      },
+      {
+        id: 2,
+        nama: "Kaos Putih Lengan Panjang",
+        harga: 60000,
+        img: "img/kaos2.jpg",
+        deskripsi: "Kaos putih lengan panjang yang cocok untuk segala suasana.",
+        ulasan: [
+          { rating: 4, komentar: "Pas untuk dipakai santai maupun formal." },
+          { rating: 3, komentar: "Sedikit tipis tapi nyaman." }
+        ]
+      },
+      {
+        id: 3,
+        nama: "Kaos Merah Bergaris",
+        harga: 55000,
+        img: "img/kaos3.jpg",
+        deskripsi: "Kaos merah bergaris yang trendi dan modern.",
+        ulasan: [
+          { rating: 5, komentar: "Motifnya keren dan bahan enak!" }
+        ]
+      },
+      {
+        id: 4,
+        nama: "Kaos Abu Lengan Pendek",
+        harga: 52000,
+        img: "img/kaos4.jpg",
+        deskripsi: "Kaos abu cocok untuk aktivitas harian.",
+        ulasan: [
+          { rating: 4, komentar: "Bahan adem dan nyaman." }
+        ]
+      },
+      {
+        id: 5,
+        nama: "Kaos Biru Navy",
+        harga: 58000,
+        img: "img/kaos5.jpg",
+        deskripsi: "Warna biru navy elegan untuk gaya santai atau semi-formal.",
+        ulasan: [
+          { rating: 5, komentar: "Suka banget warnanya!" }
+        ]
+      },
+      {
+        id: 6,
+        nama: "Kaos Army Camo",
+        harga: 65000,
+        img: "img/kaos6.jpg",
+        deskripsi: "Kaos motif army camo yang keren dan trendi.",
+        ulasan: [
+          { rating: 4, komentar: "Buat kegiatan outdoor pas banget." },
+          { rating: 5, komentar: "Bahan kuat dan nyaman dipakai." }
+        ]
+      },
+      {
+        id: 7,
+        nama: "Kaos Hijau Botol",
+        harga: 57000,
+        img: "img/kaos7.jpg",
+        deskripsi: "Kaos hijau botol yang unik dan stylish.",
+        ulasan: [
+          { rating: 4, komentar: "Warna menarik dan cocok dipakai casual." }
+        ]
+      },
+      {
+        id: 8,
+        nama: "Kaos Polo Putih",
+        harga: 70000,
+        img: "img/kaos8.jpg",
+        deskripsi: "Kaos polo putih yang elegan dan nyaman.",
+        ulasan: [
+          { rating: 5, komentar: "Bahan lembut dan cocok untuk acara semi formal." }
+        ]
+      },
+      {
+        id: 9,
+        nama: "Kaos Oversize Hitam",
+        harga: 68000,
+        img: "img/kaos9.jpg",
+        deskripsi: "Kaos oversize hitam dengan gaya casual kekinian.",
+        ulasan: [
+          { rating: 5, komentar: "Nyaman dan stylish banget." },
+          { rating: 4, komentar: "Ukuran pas untuk saya yang suka longgar." }
+        ]
+      },
+      {
+        id: 10,
+        nama: "Kaos Kuning Cerah",
+        harga: 54000,
+        img: "img/kaos10.jpg",
+        deskripsi: "Kaos kuning cerah yang ceria dan menyegarkan.",
+        ulasan: [
+          { rating: 4, komentar: "Warnanya hidup dan bikin semangat." }
+        ]
+      },
+      {
+  id: 11,
+  nama: "Tas Selempang Kulit Wanita",
+  harga: 175000,
+  img: "img/tas1.jpg",
+  deskripsi: "Tas selempang berbahan kulit sintetis, desain simple dan elegan.",
+  ulasan: [
+    { rating: 5, komentar: "Kualitas kulitnya bagus dan tahan lama." },
+    { rating: 4, komentar: "Ukuran pas buat bawa barang penting." }
+  ]
+},
+{
+  id: 12,
+  nama: "Tas Ransel Kasual Wanita",
+  harga: 220000,
+  img: "img/tas2.jpg",
+  deskripsi: "Tas ransel cocok untuk sekolah atau kerja dengan banyak kantong.",
+  ulasan: [
+    { rating: 5, komentar: "Kantongnya banyak dan kuat." },
+    { rating: 4, komentar: "Bahan adem dan nyaman dipakai." }
+  ]
+},
+{
+  id: 13,
+  nama: "Sepatu Sneaker Putih Wanita",
+  harga: 150000,
+  img: "img/sneaker1.jpg",
+  deskripsi: "Sneaker putih casual yang cocok untuk gaya sporty maupun santai.",
+  ulasan: [
+    { rating: 4, komentar: "Ringan dan nyaman dipakai seharian." },
+    { rating: 5, komentar: "Warna netral, bisa dipadukan dengan outfit apa saja." }
+  ]
+},
+{
+  id: 14,
+  nama: "Flat Shoes Wanita Hitam",
+  harga: 120000,
+  img: "img/flatshoes1.jpg",
+  deskripsi: "Flat shoes klasik warna hitam yang cocok untuk kerja atau kuliah.",
+  ulasan: [
+    { rating: 5, komentar: "Nyaman dan elegan." }
+  ]
+},
+{
+  id: 15,
+  nama: "Blouse Wanita Lengan Balon",
+  harga: 75000,
+  img: "img/blouse1.jpg",
+  deskripsi: "Blouse modis dengan lengan balon yang cocok untuk acara santai maupun formal.",
+  ulasan: [
+    { rating: 5, komentar: "Modelnya cantik dan elegan." },
+    { rating: 4, komentar: "Cocok dipadukan dengan jeans atau rok." }
+  ]
+},
+{
+  id: 16,
+  nama: "Dress Midi Floral",
+  harga: 98000,
+  img: "img/dress1.jpg",
+  deskripsi: "Dress dengan motif bunga yang feminin dan lembut untuk tampilan chic.",
+  ulasan: [
+    { rating: 5, komentar: "Bahannya adem dan motifnya manis sekali." }
+  ]
+}
+    ];
+
+    function buatBintang(rating) {
+      return "★".repeat(rating) + "☆".repeat(5 - rating);
+    }
+
+    function toggleDetail(id) {
+      const el = document.getElementById(`detail-${id}`);
+      el.style.display = el.style.display === "block" ? "none" : "block";
+    }
+
+    function tambahKeKeranjang(id) {
+      const keranjang = JSON.parse(localStorage.getItem("keranjang")) || [];
+      const produk = produkData.find(p => p.id === id);
+      keranjang.push(produk);
+      localStorage.setItem("keranjang", JSON.stringify(keranjang));
+      alert(`${produk.nama} ditambahkan ke keranjang.`);
+    }
+
+    function tampilkanProduk() {
+      const container = document.getElementById("produk-list");
+      produkData.forEach(p => {
+        const card = document.createElement("div");
+        card.className = "produk-card";
+        card.innerHTML = `
+          <img src="${p.img}" alt="${p.nama}" />
+          <h3>${p.nama}</h3>
+          <p><strong>Rp ${p.harga.toLocaleString("id-ID")}</strong></p>
+          <button onclick="tambahKeKeranjang(${p.id})">Tambah ke Keranjang</button>
+          <button class="btn-detail" onclick="toggleDetail(${p.id})">Detail Produk</button>
+          <div class="detail-produk" id="detail-${p.id}">
+            <p>${p.deskripsi}</p>
+            <div class="ulasan">
+              <strong>Ulasan Pengguna:</strong>
+              ${p.ulasan.map(u => `
+                <div>
+                  <div class="bintang">${buatBintang(u.rating)}</div>
+                  <p>"${u.komentar}"</p>
+                </div>
+              `).join("")}
+            </div>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    tampilkanProduk();
+  </script>
+</body>
+</html>

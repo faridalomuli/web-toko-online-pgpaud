@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Beranda - Toko indah</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f7f7f7;
+    }
+
+    header {
+      background-color: #2c3e50;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+
+    nav {
+      background-color: #34495e;
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      padding: 10px;
+    }
+
+    nav a, nav button {
+      color: white;
+      text-decoration: none;
+      padding: 10px 15px;
+      background-color: #2980b9;
+      border: none;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+
+    nav button {
+      cursor: pointer;
+    }
+
+    nav a:hover, nav button:hover {
+      background-color: #1abc9c;
+    }
+
+    .content {
+      padding: 40px;
+      text-align: center;
+    }
+
+    .promo {
+      font-size: 18px;
+      color: #e74c3c;
+      margin-top: 20px;
+      background: #fff3cd;
+      padding: 15px;
+      border: 1px solid #ffeeba;
+      border-radius: 6px;
+      display: inline-block;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Selamat Datang di Toko Indah!</h1>
+    <p>Temukan produk terbaik dengan harga terbaik!</p>
+  </header>
+
+  <nav>
+    <a href="index.html">Beranda</a>
+    <a href="produk.html">Produk</a>
+    <a href="keranjang.html">Keranjang</a>
+    <a href="checkout.html">Checkout</a>
+    <a href="login.html" id="loginLink">Login Admin</a>
+    <a href="kontak.html">Kontak</a>
+    <button onclick="logout()">Logout</button>
+  </nav>
+
+  <div class="content">
+    <div class="promo">
+      🎉 Promo spesial: Beli 2 gratis 1 untuk pembelian kaos polos hingga akhir bulan! 🎁
+    </div>
+  </div>
+
+  <script src="js/auth.js"></script>
+</body>
+</html>
